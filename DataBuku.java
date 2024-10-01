@@ -381,22 +381,15 @@ public class DataBuku extends javax.swing.JFrame {
     public void showTable() {
         tbmmhs = new DefaultTableModel(new String[]{"ISBN", "JUDUL BUKU", "TAHUN TERBIT", "PENERBIT"}, 0);
         String driver = "org.postgresql.Driver";
-        String koneksi = "jdbc:postgresql://localhost:5432/pbo"; // Sesuaikan URL database
+        String koneksi = "jdbc:postgresql://localhost:5432/pbo";
         String user = "postgres";
-        String password = "nidzom15"; // Sesuaikan username dan password
-        String sql = "SELECT * FROM buku ORDER BY ISBN"; // Query SQL
+        String password = "nidzom15";
+        String sql = "SELECT * FROM buku ORDER BY ISBN";
 
         try {
-            // Load driver PostgreSQL
             Class.forName(driver);
-
-            // Koneksi ke database, tanpa mendeklarasikan Connection di level kelas
             try (var conn = DriverManager.getConnection(koneksi, user, password); Statement stmt = conn.createStatement()) {
-
-                // Eksekusi query
                 ResultSet rs = stmt.executeQuery(sql);
-
-                // Set model tabel dari ResultSet
                 while (rs.next()) {
                     tbmmhs.addRow(new Object[]{
                         rs.getString("ISBN").trim(),
@@ -404,16 +397,13 @@ public class DataBuku extends javax.swing.JFrame {
                         rs.getInt("TahunTerbit"),
                         rs.getString("penerbit").trim()
                     });
-                    // Untuk debugging, cetak setiap row yang diambil dari database
                     System.out.println(rs.getString("ISBN") + " " + rs.getString("JudulBuku") + " " + rs.getInt("TahunTerbit") + " " + rs.getString("penerbit"));
                 }
-            } // Koneksi dan statement akan otomatis ditutup di sini
+            } 
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DataBuku.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        // Set model ke tabel GUI
         tabel.setModel(tbmmhs);
 
     }
